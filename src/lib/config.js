@@ -14,10 +14,10 @@ module.exports = {
     }
   },
   FIREBASE: {
-    apiKey:"AIzaSyBjPJfRSD-hzx7rU6l4Fm4hhfaDd6IeruU",
-    authDomain: "geosnap-21628.firebaseapp.com",
-    databaseURL: "https://geosnap-21628.firebaseio.com",
-    storageBucket: "geosnap-21628.appspot.com",
-    messagingSenderId: "200552480479"
+    apiKey:"",
+    authDomain: "",
+    databaseURL: "",
+    storageBucket: "",
+    messagingSenderId: ""
   }
 }

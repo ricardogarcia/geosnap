@@ -18,7 +18,9 @@ import {
     AppRegistry,
     StyleSheet,
     View,
-    Text } from 'react-native'
+    Text,
+    Dimensions
+   } from 'react-native'
 
 /**
  * ### Router-Flux
@@ -120,7 +122,8 @@ function getInitialState () {
 
 const styles = StyleSheet.create({
   tabBar: {
-    height: 70
+    height: 70,
+    width: Dimensions.get('window').width
   }
 })
 
@@ -131,9 +134,10 @@ const styles = StyleSheet.create({
  */
 class TabIcon extends React.Component {
   render () {
-    var color = this.props.selected ? '#FF3366' : '#FFB3B3'
+    var color = this.props.selected ? '#7ec0ee' : '#000000'
+    const margin = 20;
     return (
-      <View style={{flex: 1, flexDirection: 'column', alignItems: 'center', alignSelf: 'center'}}>
+      <View style={{flex: 1,marginRight:margin,marginLeft:margin, flexDirection: 'column', alignItems: 'center', alignSelf: 'center'}}>
         <Icon style={{color: color}} name={this.props.iconName} size={30} />
         <Text style={{color: color}}>{this.props.title}</Text>
       </View>
@@ -166,7 +170,7 @@ export default function native (platform) {
       return (
 
         <Provider store={store}>
-          <Router sceneStyle={{ backgroundColor: 'white' }}>
+          <Router sceneStyle={{ backgroundColor: 'transparent' }}>
             <Scene key='root' hideNavBar>
               <Scene key='App'
                 component={App}
@@ -199,22 +203,22 @@ export default function native (platform) {
                 default='Main'>
 
                 <Scene key='Logout'
-                  title={I18n.t('geosnap.logout')}
+                  title={''}
                   icon={TabIcon}
                   iconName={"sign-out"}
                   hideNavBar
                   component={Logout} />
 
                 <Scene key='Main'
-                  title={I18n.t('geosnap.main')}
-                  iconName={"home"}
+                  title={''}
+                  iconName={"circle-thin"}
                   icon={TabIcon}
                   hideNavBar
                   component={Main}
                   initial />
 
                 <Scene key='Profile'
-                  title={I18n.t('geosnap.profile')}
+                  title={''}
                   icon={TabIcon}
                   iconName={"gear"}
                   hideNavBar
