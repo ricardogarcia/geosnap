@@ -1,0 +1,3 @@
+rootProject.name = 'geosnap'
+
+include ':app'
