@@ -8,6 +8,7 @@
   "dependencies": {
     "apsl-react-native-button": "3.0.0",
     "firebase": "^3.4.0",
+    "geofire": "^4.1.1",
     "immutable": "3.8.1",
     "key-mirror": "1.0.1",
     "react": "15.3.1-rc.2",

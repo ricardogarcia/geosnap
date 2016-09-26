@@ -16,6 +16,7 @@ import { connect } from 'react-redux'
  * The actions we need
  */
 import * as authActions from '../reducers/auth/authActions'
+import * as photoActions from '../reducers/photo/photoActions'
 import * as globalActions from '../reducers/global/globalActions'
 
 /**
@@ -74,7 +75,7 @@ function mapStateToProps (state) {
  */
 function mapDispatchToProps (dispatch) {
   return {
-    actions: bindActionCreators({ ...authActions, ...globalActions }, dispatch)
+    actions: bindActionCreators({ ...authActions, ...globalActions,...photoActions }, dispatch)
   }
 }
 
@@ -130,9 +131,21 @@ class Main extends Component {
   }
 
   takePicture() {
-    this.camera.capture()
-      .then((data) => console.log(data))
-      .catch(err => console.error(err));
+    var self = this;
+    navigator.geolocation.getCurrentPosition(function(position){
+      console.log('Your current position is:');
+      console.log('Latitude : ' + position.coords.latitude);
+      console.log('Longitude: ' + position.coords.longitude);
+      console.log('More or less ' + position.coords.accuracy + ' meters.');
+      const options = {metadata:position}
+      this.camera.capture(options)
+        .then((data) => {
+          //console.log(data)
+          self.props.actions.savePhoto(data.data,position);
+        })
+        .catch(err => console.error(err));
+    }.bind(this))
+
   }
 
   render () {
@@ -147,6 +160,8 @@ class Main extends Component {
           style={styles.preview}
           aspect={Camera.constants.Aspect.fill}
           captureAudio={false}
+          captureTarget={Camera.constants.CaptureTarget.memory}
+          captureQuality={Camera.constants.CaptureQuality.low}
           >
           <View style={{flex: 0, flexDirection: 'column', alignItems: 'center', alignSelf: 'center'}}>
             <Icon style={styles.capture} onPress={this.takePicture.bind(this)} name={cameraIconName} size={80} />

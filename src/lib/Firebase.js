@@ -16,8 +16,10 @@ import CONFIG from './config'
 import _ from 'underscore'
 import Backend from './Backend'
 import * as firebase from 'firebase';
+import GeoFire from 'geofire';
 
 firebase.initializeApp(CONFIG.FIREBASE);
+const geoFire = new GeoFire(firebase.database().ref());
 
 export default class Firebase extends Backend {
   /**
@@ -117,6 +119,41 @@ export default class Firebase extends Backend {
         throw (error)
       })
   }
+
+  /**
+   * ### savePhoto
+   * the data is already in a JSON format
+   *
+   * @param data
+   * {imageData: "base64encodedString",position:locationFromGeolocationGetCurrentPosition}
+   *
+   * @returns empty object
+   *
+   * if error:  {code: xxx, error: 'message'}
+   */
+  savePhoto (data) {
+    var currentUser = firebase.auth().currentUser;
+    var photosRef = firebase.database().ref().child("photos");
+    var photoData = {};
+    photoData[currentUser.uid] = data;
+
+    var newPhotoRef = photosRef.push(photoData,function(error){
+        if (error){
+          console.error(error);
+        } else {
+          console.log("photo saved");
+          var photoKey = newPhotoRef.key;
+          var position = data.position;
+          geoFire.set(photoKey, [position.coords.latitude, position.coords.longitude])
+          .then(function() {
+            console.log("Provided key has been added to GeoFire");
+          }, function(error) {
+            console.log("Error: " + error);
+          });
+        }
+    })
+  }
+
   /**
    * ### getProfile
    * Using the sessionToken, we'll get everything about
